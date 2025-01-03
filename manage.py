@@ -12,8 +12,8 @@ def make_shell_context():
 
 # custom runserver command
 @app.cli.command("runserver")
-@click.option("--host", default="0.0.0.0", help="Host to run server on.")
-@click.option("--port", default=5001, help="Port to run server on." )
+@click.option("--host", default="127.0.0.1", help="Host to run server on.")
+@click.option("--port", default=8080, help="Port to run server on." )
 def runserver(host, port):
     """Run the flask application with SocketIO"""
     print(f"server starting at: {host}:{port}")
