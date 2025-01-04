@@ -1,7 +1,7 @@
 from gevent import monkey  # for handling concurrent I/O-bound tasks
 monkey.patch_all()  # patches standard python libraries to make them async
 
-import os
+import webbrowser
 from cyoa import app, redis_db, socketio
 import click
 
@@ -16,9 +16,15 @@ def make_shell_context():
 @click.option("--port", default=8080, help="Port to run server on." )
 def runserver(host, port):
     """Run the flask application with SocketIO"""
-    print(f"server starting at: {host}:{port}")
+    
+    url = f"http://{host}:{port}"
+    print(f"server starting at: {url}")
+    
+    webbrowser.open(url)
+    
     socketio.run(app, host=host, port=port)
 
 
 if __name__=='__main__':
-    app.run
+    print("running file directly")
+    socketio.run(app, host="127.0.0.1", port=5001, debug=True)
