@@ -8,7 +8,7 @@ import click
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'app': app}
+    return {'app': app, 'redis_db': redis_db}
 
 # custom runserver command
 @app.cli.command("runserver")
@@ -20,7 +20,6 @@ def runserver(host, port):
     url = f"http://{host}:{port}"
     print(f"server starting at: {url}")
     
-    webbrowser.open(url)
     
     socketio.run(app, host=host, port=port)
 
