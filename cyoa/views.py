@@ -1,7 +1,12 @@
-from flask import render_template, abort
+import cgi
+from flask import render_template, abort, request
 from jinja2 import TemplateNotFound
+from twilio.twiml.messaging_response import MessagingResponse
+from twilio.rest import Client
 
-from . import app
+from .config import TWILIO_NUMBER
+
+from . import app, redis_db
 
 @app.route('/<presentation_name>/', methods=['GET'])
 def landing(presentation_name):
@@ -21,3 +26,18 @@ def landing(presentation_name):
         return render_template(presentation_name + '.html')
     except TemplateNotFound:
         abort(404)
+        
+        
+@app.route('/cyoa/twilio/webhook', methods=['POST'])
+def twilio_callback():
+    to = request.form.get('To', '')
+    from_ = request.form.get('From', '')
+    message = request.form.get('Body', '').lower()
+    
+    if to == TWILIO_NUMBER:
+        redis_db.incr(cgi.escape(message))
+    
+    resp = MessagingResponse()
+    resp.message('Thanks for your vote!')
+    return str(resp)
+    
