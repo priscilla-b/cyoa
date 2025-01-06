@@ -1,9 +1,9 @@
 from gevent import monkey  # for handling concurrent I/O-bound tasks
 monkey.patch_all()  # patches standard python libraries to make them async
 
-import webbrowser
 from cyoa import app, redis_db, socketio
 import click
+import redis
 
 
 @app.shell_context_processor
@@ -23,6 +23,12 @@ def runserver(host, port):
     
     socketio.run(app, host=host, port=port)
 
+# command to clear votes stored with redis
+@app.cli.command("clear_redis")
+def clear_redis():
+    redis_cli = redis.StrictRedis(host='localhost', port='6379', db='0')
+    redis_cli.delete('left')
+    redis_cli.delete('right')
 
 if __name__=='__main__':
     print("running file directly")
