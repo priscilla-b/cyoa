@@ -6,7 +6,7 @@ from twilio.rest import Client
 
 from .config import TWILIO_NUMBER
 
-from . import app, redis_db
+from . import app, redis_db, socketio
 
 @app.route('/<presentation_name>/', methods=['GET'])
 def landing(presentation_name):
