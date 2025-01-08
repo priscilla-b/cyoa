@@ -36,6 +36,9 @@ def twilio_callback():
     
     if to == TWILIO_NUMBER:
         redis_db.incr(cgi.escape(message))
+        socketio.emit('msg', {'div': cgi.escape(message),
+                              'val': redis_db.get(message)},
+                      namespace='/cyoa')
     
     resp = MessagingResponse()
     resp.message('Thanks for your vote!')
