@@ -1,4 +1,4 @@
-from flask import emit
+from flask_socketio import emit
 from . import socketio
 
 @socketio.on('connect', namespace='/cyoa')
